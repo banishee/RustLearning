@@ -119,7 +119,7 @@ impl fmt::Display for List {
         // Iterate over `v` in `vec` while enumerating the iteration count in `count`.
         for (count, v) in vec.iter().enumerate() {
             if count != 0 {write!(f, ", ")?;}
-            write!(f, "{}", v)?;
+            write!(f, "{}: {}", count, v)?;
         }
 
         write!(f, "]")
