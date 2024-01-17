@@ -12,6 +12,7 @@ fn main() {
     debug();
     display();
     list();
+    formatting();
 }
 
 // Derive the `fmt::Debug` implementation for `Structure`.
@@ -129,4 +130,48 @@ impl fmt::Display for List {
 fn list() {
     let v = List(vec![1, 2, 3]);
     println!("{}", v);
+}
+
+use std::fmt::{Formatter, Display};
+
+struct City {
+    name: &'static str,
+    lat: f32, // Latitude
+    lon: f32, // Longitude
+}
+
+impl Display for City{
+    // `f` is a buffer, and this method must write the formatted string into it.
+    fn fmt(&self, f: &mut Formatter) -> fmt::Result {
+        let lat_c = if self.lat >= 0.0 {'N'} else {'S'};
+        let lon_c = if self.lon >= 0.0 {'E'} else {'W'};
+
+        write!(f, "{}: {:.3}°{} {:.3}°{}",
+            self.name, self.lat.abs(), lat_c, self.lon.abs(), lon_c)
+    }
+}
+
+#[derive(Debug)]
+struct Color {
+    red: u8,
+    green: u8,
+    blue: u8,
+}
+
+fn formatting() {
+    for city in [
+        City { name: "Dublin", lat: 53.347778, lon: -6.259722 },
+        City { name: "Oslo", lat: 59.95, lon: 10.75 },
+        City { name: "Vancouver", lat: 49.25, lon: -123.1 },
+    ] {
+        println!("{}", city);
+    }
+
+    for color in [
+        Color { red: 128, green: 255, blue: 90 },
+        Color { red: 0, green: 3, blue: 254 },
+        Color { red: 0, green: 0, blue: 0 },
+    ] {
+        println!("{:?}", color);
+    }
 }
